@@ -38,6 +38,8 @@ export default function Login() {
     }
 
     if (data) {
+      localStorage.setItem("token", data.loginUser.token);
+      // console.log(data);
       dispatch(login());
     }
   });

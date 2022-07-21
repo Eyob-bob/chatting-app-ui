@@ -9,8 +9,20 @@ import {
 } from "@chakra-ui/react";
 import { EmailIcon, LockIcon } from "@chakra-ui/icons";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
 
 export default function SignUp() {
+  const user = useSelector((state) => state.user.value);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (user) {
+      router.push("/home");
+    }
+  });
+
   return (
     <div>
       <Head>
