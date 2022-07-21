@@ -11,8 +11,12 @@ import {
 } from "@chakra-ui/react";
 import Link from "next/link";
 import Image from "next/image";
+import { useDispatch } from "react-redux";
+import { logout } from "../feature/user/userSlice";
 
 export default function Navbar({ children }) {
+  const dispatch = useDispatch();
+
   return (
     <div>
       <div className="shadow-lg py-2 fixed top-0 w-full bg-white">
@@ -34,7 +38,13 @@ export default function Navbar({ children }) {
                 <Avatar src="/images/profile.jpg" size="sm" />
               </MenuButton>
               <MenuList>
-                <MenuItem>logout</MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    dispatch(logout());
+                  }}
+                >
+                  logout
+                </MenuItem>
               </MenuList>
             </Menu>
           </Flex>
