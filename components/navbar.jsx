@@ -14,7 +14,7 @@ import Image from "next/image";
 import { useDispatch } from "react-redux";
 import { logout } from "../feature/user/userSlice";
 
-export default function Navbar({ children }) {
+export default function Navbar({ username, email }) {
   const dispatch = useDispatch();
 
   return (
@@ -34,8 +34,23 @@ export default function Navbar({ children }) {
           <Flex gap="2rem" justifyContent="center" alignItems="center">
             <IconButton icon={<SunIcon />}></IconButton>
             <Menu>
-              <MenuButton variantColor="pink">
-                <Avatar src="/images/profile.jpg" size="sm" />
+              <MenuButton>
+                <Flex
+                  justifyContent="center"
+                  alignItems="center"
+                  gap="1rem"
+                  className="border rounded-lg px-2 py-1"
+                >
+                  <Avatar src="/images/profile.jpg" size="sm" />
+                  <Flex
+                    justifyContent="start"
+                    flexDirection="column"
+                    alignItems="start"
+                  >
+                    <p className="font-bold text-md">{username}</p>
+                    <p className="text-xs">{email}</p>
+                  </Flex>
+                </Flex>
               </MenuButton>
               <MenuList>
                 <MenuItem
@@ -50,7 +65,6 @@ export default function Navbar({ children }) {
           </Flex>
         </Flex>
       </div>
-      {children}
     </div>
   );
 }

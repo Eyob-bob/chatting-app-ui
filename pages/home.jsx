@@ -2,42 +2,40 @@ import Navbar from "../components/navbar";
 import Head from "next/head";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useQuery, gql } from "@apollo/client";
 
 const GET_USER = gql`
-  query Query($userId: ID!) {
-    user(id: $userId) {
-      token
+  query Query {
+    user {
+      username
+      email
     }
   }
 `;
 
 export default function Home() {
-  const user = useSelector((state) => state.user.value);
-
+  const userAuthInfo = useSelector((state) => state.user.value);
   const router = useRouter();
 
-  const { loading, error, data } = useQuery(GET_USER, {
-    variables: { userId: "62d7f5ab385068e9a68ddd8c" },
-  });
+  const { loading, error, data } = useQuery(GET_USER);
 
   useEffect(() => {
-    if (!user) {
+    if (!userAuthInfo) {
       router.push("/");
     }
-  }, [user]);
+  }, [userAuthInfo]);
 
-  if (!user) return <p>Redirecting...</p>;
+  if (error) return <p>Error</p>;
+  if (loading) return <p>Loading</p>;
 
   return (
     <div>
       <Head>
         <title>Home</title>
       </Head>
-      <Navbar>
-        <p className="mt-20">{JSON.stringify(data)}</p>
-      </Navbar>
+      <Navbar username={data.user.username} email={data.user.email} />
+      <p className="mt-20">{data.user.username}</p>
     </div>
   );
 }

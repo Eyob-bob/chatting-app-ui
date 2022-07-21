@@ -26,29 +26,38 @@ const LOGIN_USER = gql`
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const user = useSelector((state) => state.user.value);
+  const userAuthInfo = useSelector((state) => state.user.value);
   const dispatch = useDispatch();
   const router = useRouter();
 
   const [loginUser, { data, loading, error }] = useMutation(LOGIN_USER);
 
   useEffect(() => {
-    if (user) {
+    if (userAuthInfo) {
       router.push("/home");
     }
+  }, [userAuthInfo]);
 
+  useEffect(() => {
     if (data) {
       localStorage.setItem("token", data.loginUser.token);
-      // console.log(data);
       dispatch(login());
     }
-  });
+  }, [data]);
 
   function handleSubmit(e) {
     e.preventDefault();
     loginUser({
       variables: { loginInput: { email, password } },
     });
+  }
+
+  if (error) {
+    return router.push("/404");
+  }
+
+  if (loading) {
+    return <div>loading</div>;
   }
 
   return (
