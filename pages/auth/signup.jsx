@@ -10,35 +10,69 @@ import {
 import { EmailIcon, LockIcon } from "@chakra-ui/icons";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { gql, useMutation } from "@apollo/client";
+import { login } from "../../feature/user/userSlice";
+
+const SAVE_USER = gql`
+  mutation Mutation($registerInput: RegisterInput) {
+    registerUser(registerInput: $registerInput) {
+      token
+    }
+  }
+`;
 
 export default function SignUp() {
-  const user = useSelector((state) => state.user.value);
+  const userAuthInfo = useSelector((state) => state.user.value);
   const router = useRouter();
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  // const [username, setUsername] = useState('')
+  const dispatch = useDispatch();
+
+  const [registerUser, { data, loading, error }] = useMutation(SAVE_USER);
 
   useEffect(() => {
-    if (user) {
+    if (userAuthInfo) {
       router.push("/home");
     }
-  });
+  }, [userAuthInfo]);
+
+  useEffect(() => {
+    if (data) {
+      localStorage.setItem("token", data.registerUser.token);
+      dispatch(login());
+    }
+  }, [data]);
+
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    registerUser({
+      variables: { registerInput: { username, email, password } },
+    });
+  }
 
   return (
     <div>
       <Head>
-        <title>sign up</title>
+        <title>sign up {userAuthInfo}</title>
       </Head>
 
       <Flex height="100vh" justifyContent="center" alignItems="center">
         <Flex className="shadow-2xl rounded-xl p-11" direction="column">
           <Heading mb="8">Sign up</Heading>
-          <form className="flex flex-col">
+          <form className="flex flex-col" onSubmit={handleSubmit}>
             <Input
               required
               variant="outline"
               mb="3"
               placeholder="name"
               type="text"
+              onChange={(e) => setUsername(e.target.value)}
+              value={username}
             />
             <InputGroup>
               <Input
@@ -47,6 +81,8 @@ export default function SignUp() {
                 placeholder="Email"
                 type="email"
                 required
+                onChange={(e) => setEmail(e.target.value)}
+                value={email}
               />
               <InputLeftElement>
                 <EmailIcon />
@@ -59,6 +95,8 @@ export default function SignUp() {
                 placeholder="******"
                 type="password"
                 required
+                onChange={(e) => setPassword(e.target.value)}
+                value={password}
               />
               <InputLeftElement>
                 <LockIcon />

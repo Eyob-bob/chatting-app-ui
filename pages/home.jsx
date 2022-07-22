@@ -4,6 +4,9 @@ import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useQuery, gql } from "@apollo/client";
+import Sidebar from "../components/Sidebar";
+import { Flex, Input } from "@chakra-ui/react";
+import Messages from "../components/Messages";
 
 const GET_USER = gql`
   query Query {
@@ -17,6 +20,7 @@ const GET_USER = gql`
 export default function Home() {
   const userAuthInfo = useSelector((state) => state.user.value);
   const router = useRouter();
+  const [searchInput, setSearchInput] = useState("");
 
   const { loading, error, data } = useQuery(GET_USER);
 
@@ -26,7 +30,7 @@ export default function Home() {
     }
   }, [userAuthInfo]);
 
-  if (error) return <p>Error</p>;
+  if (error) return <p>{JSON.stringify(error)}</p>;
   if (loading) return <p>Loading</p>;
 
   return (
@@ -35,7 +39,21 @@ export default function Home() {
         <title>Home</title>
       </Head>
       <Navbar username={data.user.username} email={data.user.email} />
-      <p className="mt-20">{data.user.username}</p>
+      <div className="min-h-screen w-screen flex justify-center">
+        <div className="text-center max-w-[760px] w-[100%] flex flex-col justify-center items-center mt-20 py-10 mx-20 my-auto border md:mx-10 sm:mx-2">
+          <Input
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            width="50%"
+            placeholder="Search with name"
+            mb={6}
+          />
+          <Flex className=" w-[100%]">
+            <Sidebar />
+            <Messages />
+          </Flex>
+        </div>
+      </div>
     </div>
   );
 }

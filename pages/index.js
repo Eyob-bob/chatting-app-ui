@@ -78,6 +78,7 @@ export default function Login() {
                 mb="3"
                 placeholder="Email"
                 type="email"
+                required
               />
               <InputLeftElement>
                 <EmailIcon />
@@ -91,6 +92,7 @@ export default function Login() {
                 mb="6"
                 placeholder="*******"
                 type="password"
+                required
               />
               <InputLeftElement>
                 <LockIcon />
