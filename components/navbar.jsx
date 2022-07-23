@@ -30,13 +30,18 @@ export default function Navbar({ username, email }) {
         >
           <Link href="/home">
             <a>
-              <Image src="/images/chatnow.png" width="90px" height="50px" />
+              <Image
+                src="/images/chatnow.png"
+                alt="Logo"
+                width="90px"
+                height="50px"
+              />
             </a>
           </Link>
           <Flex gap="2rem" justifyContent="center" alignItems="center">
             <IconButton
               onClick={toggleColorMode}
-              icon={colorMode == "light" ? <SunIcon /> : <MoonIcon />}
+              icon={colorMode == "light" ? <MoonIcon /> : <SunIcon />}
             ></IconButton>
             {user ? (
               <Menu>

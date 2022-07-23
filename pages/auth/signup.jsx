@@ -6,6 +6,7 @@ import {
   InputLeftElement,
   Button,
   Heading,
+  useToast,
 } from "@chakra-ui/react";
 import { EmailIcon, LockIcon } from "@chakra-ui/icons";
 import Link from "next/link";
@@ -31,6 +32,7 @@ export default function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
+  const toast = useToast();
 
   const [registerUser, { data, loading, error }] = useMutation(SAVE_USER);
 
@@ -44,6 +46,14 @@ export default function SignUp() {
     if (data) {
       localStorage.setItem("token", data.registerUser.token);
       dispatch(login());
+      toast.closeAll();
+      toast({
+        title: "Account created.",
+        description: "We've created your account for you.",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
     }
   }, [data]);
 
@@ -56,7 +66,16 @@ export default function SignUp() {
   }
 
   if (error) {
-    return <div>Error</div>;
+    toast.closeAll();
+    toast({
+      title: "Error",
+      description: `${error.graphQLErrors[0].message}`,
+      status: "error",
+      duration: 3000,
+      isClosable: true,
+      position: "bottom-right",
+      variant: "left-accent",
+    });
   }
 
   if (loading) {

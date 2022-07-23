@@ -6,6 +6,7 @@ import {
   InputLeftElement,
   Button,
   Heading,
+  useToast,
 } from "@chakra-ui/react";
 import { EmailIcon, LockIcon } from "@chakra-ui/icons";
 import Link from "next/link";
@@ -30,6 +31,7 @@ export default function Login() {
   const userAuthInfo = useSelector((state) => state.user.value);
   const dispatch = useDispatch();
   const router = useRouter();
+  const toast = useToast();
 
   const [loginUser, { data, loading, error }] = useMutation(LOGIN_USER);
 
@@ -54,7 +56,16 @@ export default function Login() {
   }
 
   if (error) {
-    return <div>Error</div>;
+    toast.closeAll();
+    toast({
+      title: "Error",
+      description: `${error.graphQLErrors[0].message}`,
+      status: "error",
+      duration: 3000,
+      isClosable: true,
+      position: "bottom-right",
+      variant: "left-accent",
+    });
   }
 
   if (loading) {
