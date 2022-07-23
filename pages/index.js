@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useMutation, gql } from "@apollo/client";
 import { login } from "../feature/user/userSlice";
+import Navbar from "../components/navbar";
 
 const LOGIN_USER = gql`
   mutation LoginUser($loginInput: LoginInput) {
@@ -53,7 +54,7 @@ export default function Login() {
   }
 
   if (error) {
-    return router.push("/404");
+    return <div>Error</div>;
   }
 
   if (loading) {
@@ -65,7 +66,7 @@ export default function Login() {
       <Head>
         <title>Login</title>
       </Head>
-
+      <Navbar />
       <Flex height="100vh" justifyContent="center" alignItems="center">
         <Flex className="shadow-2xl rounded-xl p-20" direction="column">
           <Heading mb="8">Login</Heading>

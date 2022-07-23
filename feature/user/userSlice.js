@@ -1,7 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  value: typeof window !== "undefined" ? localStorage.getItem("token") : null,
+  value:
+    typeof window !== "undefined"
+      ? localStorage.getItem("token") || null
+      : null,
 };
 
 export const userSlice = createSlice({
@@ -14,7 +17,7 @@ export const userSlice = createSlice({
     },
     logout: (state) => {
       state.value =
-        typeof window !== "undefined" ? localStorage.clear("token") : null;
+        typeof window !== "undefined" ? localStorage.removeItem("token") : null;
     },
   },
 });

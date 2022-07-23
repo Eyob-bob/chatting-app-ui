@@ -30,7 +30,7 @@ export default function Home() {
     }
   }, [userAuthInfo]);
 
-  if (error) return <p>{JSON.stringify(error)}</p>;
+  if (error) return <p>Error</p>;
   if (loading) return <p>Loading</p>;
 
   return (

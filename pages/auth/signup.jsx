@@ -14,6 +14,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { gql, useMutation } from "@apollo/client";
 import { login } from "../../feature/user/userSlice";
+import Navbar from "../../components/navbar";
 
 const SAVE_USER = gql`
   mutation Mutation($registerInput: RegisterInput) {
@@ -29,7 +30,6 @@ export default function SignUp() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  // const [username, setUsername] = useState('')
   const dispatch = useDispatch();
 
   const [registerUser, { data, loading, error }] = useMutation(SAVE_USER);
@@ -55,12 +55,20 @@ export default function SignUp() {
     });
   }
 
+  if (error) {
+    return <div>Error</div>;
+  }
+
+  if (loading) {
+    return <div>loading</div>;
+  }
+
   return (
     <div>
       <Head>
         <title>sign up {userAuthInfo}</title>
       </Head>
-
+      <Navbar />
       <Flex height="100vh" justifyContent="center" alignItems="center">
         <Flex className="shadow-2xl rounded-xl p-11" direction="column">
           <Heading mb="8">Sign up</Heading>
