@@ -129,12 +129,6 @@ export default function SignUp() {
                 <LockIcon />
               </InputLeftElement>
             </InputGroup>
-            <Input
-              type="file"
-              variant="outline"
-              mb="6"
-              placeholder="profile picture"
-            />
             <Button type="submit" variant="solid" colorScheme="blue" mb="3">
               Sign up
             </Button>

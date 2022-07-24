@@ -52,7 +52,6 @@ export default function Navbar({ username, email }) {
                     gap="1rem"
                     className="border rounded-lg px-2 py-1"
                   >
-                    <Avatar src="/images/profile.jpg" size="sm" />
                     <Flex
                       justifyContent="start"
                       flexDirection="column"

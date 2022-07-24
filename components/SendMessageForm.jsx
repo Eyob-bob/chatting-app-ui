@@ -32,7 +32,7 @@ const SendMessageForm = ({ senderEmail, recieverEmail }) => {
         });
         setTypedMessage("");
       }}
-      className="flex items-center gap-2 m-2 "
+      className="flex items-center gap-2 mx-2 "
     >
       <Input
         placeholder="type and hit send"

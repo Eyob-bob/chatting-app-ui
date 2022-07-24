@@ -12,12 +12,11 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     login: (state) => {
-      state.value =
-        typeof window !== "undefined" ? localStorage.getItem("token") : null;
+      state.value = localStorage.getItem("token") || null;
     },
     logout: (state) => {
-      state.value =
-        typeof window !== "undefined" ? localStorage.removeItem("token") : null;
+      localStorage.removeItem("token");
+      state.value = null;
     },
   },
 });
