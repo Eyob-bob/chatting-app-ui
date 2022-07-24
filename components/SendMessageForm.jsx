@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import { Button, Input } from "@chakra-ui/react";
 import React, { useState } from "react";
 
@@ -13,18 +13,29 @@ const SAVE_MESSAGE = gql`
   }
 `;
 
-const SendMessageForm = () => {
+const SendMessageForm = ({ senderEmail, recieverEmail }) => {
   const [typedMessage, setTypedMessage] = useState("");
+  const [saveMessage, { loading, data, error }] = useMutation(SAVE_MESSAGE);
 
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault();
+        saveMessage({
+          variables: {
+            saveMessageInput: {
+              text: typedMessage,
+              senderEmail,
+              recieverEmail,
+            },
+          },
+        });
         setTypedMessage("");
       }}
-      className="flex justify-center items-center gap-2"
+      className="flex items-center gap-2 m-2 "
     >
       <Input
+        placeholder="type and hit send"
         onChange={(e) => setTypedMessage(e.target.value)}
         type="text"
         className="fixed bottom-0 my-4"

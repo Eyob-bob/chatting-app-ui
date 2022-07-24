@@ -4,7 +4,6 @@ import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useQuery, gql, useLazyQuery } from "@apollo/client";
-import Sidebar from "../components/Sidebar";
 import { Avatar, Flex, Input } from "@chakra-ui/react";
 import Messages from "../components/Messages";
 
@@ -38,6 +37,7 @@ const GET_MESSAGES = gql`
 export default function Home() {
   const userAuthInfo = useSelector((state) => state.user.value);
   const router = useRouter();
+  const [recieverEmail, setRecieverEmail] = useState("");
 
   const {
     loading: loadingUser,
@@ -104,6 +104,7 @@ export default function Home() {
                         },
                         pollInterval: 500,
                       });
+                      setRecieverEmail(user.email);
                     }}
                   >
                     <Avatar size="sm" />
@@ -115,6 +116,7 @@ export default function Home() {
             {dataMessages && dataMessagesReciever && (
               <Messages
                 authUserEmail={dataUser.user.email}
+                recieverEmail={recieverEmail}
                 dataMessages={dataMessages}
                 dataMessagesReciever={dataMessagesReciever}
               />
