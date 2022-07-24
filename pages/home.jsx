@@ -25,9 +25,12 @@ const GET_USERS = gql`
   }
 `;
 const GET_MESSAGES = gql`
-  query Query($recieverEmail: String) {
-    messages(recieverEmail: $recieverEmail) {
+  query Query($recieverEmail: String, $senderEmail: String) {
+    messages(recieverEmail: $recieverEmail, senderEmail: $senderEmail) {
       text
+      senderEmail
+      recieverEmail
+      createdTime
     }
   }
 `;
@@ -35,8 +38,6 @@ const GET_MESSAGES = gql`
 export default function Home() {
   const userAuthInfo = useSelector((state) => state.user.value);
   const router = useRouter();
-  const [searchInput, setSearchInput] = useState("");
-  const [messages, setMessages] = useState([]);
 
   const {
     loading: loadingUser,
@@ -48,10 +49,14 @@ export default function Home() {
     getMessages,
     { loading: loadingMessages, error: errorMessages, data: dataMessages },
   ] = useLazyQuery(GET_MESSAGES);
-
-  useEffect(() => {
-    console.log(dataMessages || "");
-  }, [dataMessages]);
+  const [
+    getMessagesReciever,
+    {
+      loading: loadingMessagesReciever,
+      error: errorMessagesReciever,
+      data: dataMessagesReciever,
+    },
+  ] = useLazyQuery(GET_MESSAGES);
 
   useEffect(() => {
     if (!userAuthInfo) {
@@ -70,13 +75,6 @@ export default function Home() {
       <Navbar username={dataUser.user.username} email={dataUser.user.email} />
       <div className="min-h-screen w-screen flex justify-center">
         <div className="text-center max-w-[760px] w-[100%] flex flex-col justify-center items-center mt-20 py-10 mx-20 my-auto border md:mx-10 sm:mx-2">
-          <Input
-            value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)}
-            width="50%"
-            placeholder="Search with name"
-            mb={6}
-          />
           <Flex className=" w-[100%]">
             <div className="w-[35%] h-[60vh] overflow-y-scroll px-4 py-2 flex flex-col gap-4 ">
               {data.users.map((user) => {
@@ -93,7 +91,18 @@ export default function Home() {
                     className="hover:cursor-pointer"
                     onClick={() => {
                       getMessages({
-                        variables: { recieverEmail: "gqexxgr@hi2.in" },
+                        variables: {
+                          senderEmail: dataUser.user.email,
+                          recieverEmail: user.email,
+                        },
+                        pollInterval: 500,
+                      });
+                      getMessagesReciever({
+                        variables: {
+                          senderEmail: user.email,
+                          recieverEmail: dataUser.user.email,
+                        },
+                        pollInterval: 500,
                       });
                     }}
                   >
@@ -103,7 +112,13 @@ export default function Home() {
                 );
               })}
             </div>
-            {dataMessages && <Messages dataMessages={dataMessages} />}
+            {dataMessages && dataMessagesReciever && (
+              <Messages
+                authUserEmail={dataUser.user.email}
+                dataMessages={dataMessages}
+                dataMessagesReciever={dataMessagesReciever}
+              />
+            )}
           </Flex>
         </div>
       </div>
