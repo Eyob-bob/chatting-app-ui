@@ -1,12 +1,13 @@
 import Navbar from "../components/navbar";
 import Head from "next/head";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useQuery, gql, useLazyQuery } from "@apollo/client";
 import { Avatar, Flex, Input } from "@chakra-ui/react";
 import Messages from "../components/Messages";
 import Footer from "../components/Footer";
+import { logout } from "../feature/user/userSlice";
 
 const GET_USER = gql`
   query Query {
@@ -39,6 +40,7 @@ export default function Home() {
   const userAuthInfo = useSelector((state) => state.user.value);
   const router = useRouter();
   const [recieverEmail, setRecieverEmail] = useState("");
+  const dispatch = useDispatch();
 
   const {
     loading: loadingUser,
@@ -69,6 +71,12 @@ export default function Home() {
       router.push("/");
     }
   }, [userAuthInfo]);
+
+  useEffect(() => {
+    if (error) {
+      dispatch(logout());
+    }
+  });
 
   if (errorUser || error) return <p>Error</p>;
   if (loading || loadingUser) return <p>Loading</p>;

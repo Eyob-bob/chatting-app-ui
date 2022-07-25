@@ -8,6 +8,8 @@ import {
   Flex,
   IconButton,
   useColorMode,
+  useColorModeValue,
+  Box,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import Image from "next/image";
@@ -21,7 +23,11 @@ export default function Navbar({ username, email }) {
 
   return (
     <div>
-      <div className="shadow-lg py-2 fixed top-0 w-full z-[999] ">
+      <div
+        className={`
+        ${colorMode === "dark" ? "bg-slate-900" : "bg-white"}
+        shadow-lg py-2 fixed top-0 w-full z-[999]`}
+      >
         <Flex
           justifyContent="space-between"
           alignItems="center"

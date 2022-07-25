@@ -36,17 +36,17 @@ export default function Login() {
   const [loginUser, { data, loading, error }] = useMutation(LOGIN_USER);
 
   useEffect(() => {
-    if (userAuthInfo) {
-      router.push("/home");
-    }
-  }, [userAuthInfo]);
-
-  useEffect(() => {
     if (data) {
       localStorage.setItem("token", data.loginUser.token);
       dispatch(login());
     }
   }, [data]);
+
+  useEffect(() => {
+    if (userAuthInfo) {
+      router.push("/home");
+    }
+  }, [userAuthInfo]);
 
   function handleSubmit(e) {
     e.preventDefault();
