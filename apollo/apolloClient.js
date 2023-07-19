@@ -2,7 +2,7 @@ import { ApolloClient, createHttpLink, InMemoryCache } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 
 const httpLink = createHttpLink({
-  uri: "https://eyob-chatting-app-backend.herokuapp.com",
+  uri: "https://chatting-app-backend.onrender.com",
 });
 
 const authLink = setContext((_, { headers }) => {
